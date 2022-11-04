@@ -8,7 +8,6 @@ class LightControl
 private:
     int _joyXdata, _joyYdata, _joySWdata;
     char _direction;
-    bool _joyState;
 public:
     LightControl();
     ~LightControl();
