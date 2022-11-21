@@ -19,6 +19,7 @@ void loop(){
     if(is_emergency){
       digitalWrite(LED_l_Pin,HIGH); digitalWrite(LED_r_Pin,HIGH); delay(300);
       digitalWrite(LED_l_Pin,LOW); digitalWrite(LED_r_Pin,LOW); delay(300);
+      return;
     }
     if(AUTO&&is_emergency==false){SC.autoRun(); LC.autoRun();} // 자동제어 활성화 
 }
