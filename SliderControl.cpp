@@ -31,11 +31,11 @@ void SliderControl::unlock(){
 }
 
 void SliderControl::chkHelmet(){
-  if(_DEBUG) {Serial.print("US1 : "); Serial.print(filter1(_count)); Serial.print("cm / ");}
-  if(_DEBUG) {Serial.print("US2 : "); Serial.print(filter2(_count)); Serial.println("cm");}
-
-  if(filter1(_count)<=US_cut && filter2(_count)<=US_cut) _helmetState=true;
-  else _helmetState = false;
+  if(_DEBUG) {
+    Serial.print("US1 : "); Serial.print(filter1(_count)); Serial.print("cm / ");
+    Serial.print("US2 : "); Serial.print(filter2(_count)); Serial.println("cm");
+  }
+  _helmetState = (filter1(_count)<=US_cut && filter2(_count)<=US_cut) ? true : false;
 }
 
 float SliderControl::filter1(int count){ // 초음파 센서 노이즈 필터링
@@ -61,7 +61,6 @@ void SliderControl::autoRun(){
   if(_helmetState == true && _lockState == true) SliderControl::unlock();
   else if(_helmetState == false && _lockState == false) SliderControl::lock();
 }
-
 
 SliderControl::~SliderControl()
 {
