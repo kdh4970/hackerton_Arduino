@@ -20,12 +20,8 @@ void LightControl::readJoy(){
 }
 
 void LightControl::chkJoyState(){
-    if(_joyXdata > 900 || _joyYdata > 900) {
-        this->_direction = 'r'; //right
-    }
-    else if(_joyXdata < 100 || _joyYdata < 100) {
-        this->_direction = 'l'; //left
-    }
+    if(_joyXdata > 900 || _joyYdata > 900) this->_direction = 'r'; //right
+    else if(_joyXdata < 100 || _joyYdata < 100) this->_direction = 'l'; //left
 }
 
 void LightControl::onRight(){
@@ -57,7 +53,6 @@ void LightControl::autoRun(){
     if(_direction == 'r') {LightControl::onRight(); this->_direction = 'x';}
     else if(_direction == 'l') {LightControl::onLeft(); this->_direction = 'x';}
     else LightControl::offLED();
-
 }
 
 LightControl::~LightControl()
