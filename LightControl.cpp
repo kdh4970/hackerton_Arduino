@@ -5,6 +5,7 @@ LightControl::LightControl()
 ,_joyYdata()
 ,_joySWdata()
 ,_direction('x')
+,_count(0)
 {
 }
 
@@ -19,26 +20,23 @@ void LightControl::readJoy(){
     }
 }
 
-void LightControl::chkJoyState(){
+char LightControl::chkJoyState(){
+    LightControl::readJoy();
     if(_joyXdata > 900 || _joyYdata > 900) this->_direction = 'r'; //right
-    else if(_joyXdata < 100 || _joyYdata < 100) this->_direction = 'l'; //left
+    else if(_joyXdata < 100 || _joyYdata < 100) this->_direction = 'l';  //left
+    else this->_direction = 'x';
+    return _direction;
 }
 
 void LightControl::onRight(){
-    if(_direction != 'r') return;
-    for (int i = 1;i<=5;i++){
-        digitalWrite(LED_r_Pin,HIGH); delay(500);
-        digitalWrite(LED_r_Pin,LOW); delay(500);
-    }
+    digitalWrite(LED_r_Pin,HIGH); delay(500);
+    digitalWrite(LED_r_Pin,LOW); delay(500);
     if(_DEBUG) Serial.println("// 우회전 //");
 }
 
 void LightControl::onLeft(){
-    if(_direction != 'l') return;
-    for (int i = 1;i<=5;i++){
-        digitalWrite(LED_l_Pin,HIGH); delay(500);
-        digitalWrite(LED_l_Pin,LOW); delay(500);
-    }
+    digitalWrite(LED_l_Pin,HIGH); delay(500);
+    digitalWrite(LED_l_Pin,LOW); delay(500);
     if(_DEBUG) Serial.println("// 좌회전 //");
 }
 
@@ -48,11 +46,22 @@ void LightControl::offLED(){
 }
 
 void LightControl::autoRun(){
-    LightControl::readJoy();
-    LightControl::chkJoyState();
-    if(_direction == 'r') {LightControl::onRight(); this->_direction = 'x';}
-    else if(_direction == 'l') {LightControl::onLeft(); this->_direction = 'x';}
-    else LightControl::offLED();
+RIGHT: 
+    if(LightControl::chkJoyState() == 'r') {
+        for(int i=0;i<5;i++){
+            LightControl::onRight();
+            if(LightControl::chkJoyState() == 'l') {goto LEFT;}
+            else continue;
+        }
+    }
+LEFT:
+    if(LightControl::chkJoyState() == 'l') {
+        for(int i=0;i<5;i++){
+            LightControl::onLeft();
+            if(LightControl::chkJoyState() == 'r'){goto RIGHT;} 
+            else continue;
+        }
+    }
 }
 
 LightControl::~LightControl()
